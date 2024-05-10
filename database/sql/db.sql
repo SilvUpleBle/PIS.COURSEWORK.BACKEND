@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS public.users
 (
-    id_user bigserial NOT NULL,
+    id_user bigserial NOT NULL UNIQUE,
     surname text NOT NULL,
     name text NOT NULL,
     middlename text,
