@@ -25,6 +25,8 @@ public class Book {
     @Column(name = "name")
     private String name;
 
+    @OneToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "id_author", referencedColumnName = "id_author")
     private Author author;
 
     @Column(name = "date_publishing")
@@ -39,7 +41,8 @@ public class Book {
     @Column(name = "cost")
     private Integer cost;
 
-
+    @OneToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "id_publisher", referencedColumnName = "id_publisher")
     private Publisher publisher;
 
 }

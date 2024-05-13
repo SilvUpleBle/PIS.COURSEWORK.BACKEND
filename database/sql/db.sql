@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS coursework.role
 
 CREATE TABLE IF NOT EXISTS coursework.user_role
 (
+    id_userrole bigserial NOT NULL UNIQUE,
     id_user bigint NOT NULL,
     id_role bigint NOT NULL
 );
