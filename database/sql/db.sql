@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS public.users
+CREATE TABLE IF NOT EXISTS coursework.users
 (
     id_user bigserial NOT NULL UNIQUE,
     surname text NOT NULL,
@@ -16,20 +16,20 @@ CREATE TABLE IF NOT EXISTS public.users
         INCLUDE(id_user)
 );
 
-CREATE TABLE IF NOT EXISTS public.role
+CREATE TABLE IF NOT EXISTS coursework.role
 (
     id_role bigserial NOT NULL UNIQUE,
     name text NOT NULL UNIQUE,
     PRIMARY KEY (id_role)
 );
 
-CREATE TABLE IF NOT EXISTS public.user_role
+CREATE TABLE IF NOT EXISTS coursework.user_role
 (
     id_user bigint NOT NULL,
     id_role bigint NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS public.books
+CREATE TABLE IF NOT EXISTS coursework.books
 (
     id_book bigserial NOT NULL UNIQUE,
     name text NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS public.books
     PRIMARY KEY (id_book)
 );
 
-CREATE TABLE IF NOT EXISTS public.check_list
+CREATE TABLE IF NOT EXISTS coursework.check_list
 (
     id_check_list bigserial NOT NULL UNIQUE,
     id_book bigint NOT NULL,
@@ -55,14 +55,14 @@ CREATE TABLE IF NOT EXISTS public.check_list
     PRIMARY KEY (id_check_list)
 );
 
-CREATE TABLE IF NOT EXISTS public.status
+CREATE TABLE IF NOT EXISTS coursework.status
 (
     id_status bigserial NOT NULL UNIQUE,
     name text NOT NULL UNIQUE,
     PRIMARY KEY (id_status)
 );
 
-CREATE TABLE IF NOT EXISTS public.subscriptions
+CREATE TABLE IF NOT EXISTS coursework.subscriptions
 (
     id_sub bigserial NOT NULL UNIQUE,
     id_user bigint NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS public.subscriptions
     PRIMARY KEY (id_sub)
 );
 
-CREATE TABLE IF NOT EXISTS public.authors
+CREATE TABLE IF NOT EXISTS coursework.authors
 (
     id_author bigserial NOT NULL UNIQUE,
     surname text NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS public.authors
     PRIMARY KEY (id_author)
 );
 
-CREATE TABLE IF NOT EXISTS public.log_list
+CREATE TABLE IF NOT EXISTS coursework.log_list
 (
     id_log bigserial NOT NULL UNIQUE,
     error text NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS public.log_list
     PRIMARY KEY (id_log)
 );
 
-CREATE TABLE IF NOT EXISTS public.publisher
+CREATE TABLE IF NOT EXISTS coursework.publisher
 (
     id_publisher bigserial NOT NULL UNIQUE,
     name text NOT NULL,
@@ -101,65 +101,65 @@ CREATE TABLE IF NOT EXISTS public.publisher
     PRIMARY KEY (id_publisher)
 );
 
-ALTER TABLE IF EXISTS public.user_role
+ALTER TABLE IF EXISTS coursework.user_role
     ADD FOREIGN KEY (id_user)
-        REFERENCES public.users (id_user) MATCH SIMPLE
+        REFERENCES coursework.users (id_user) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID;
 
 
-ALTER TABLE IF EXISTS public.user_role
+ALTER TABLE IF EXISTS coursework.user_role
     ADD FOREIGN KEY (id_role)
-        REFERENCES public.role (id_role) MATCH SIMPLE
+        REFERENCES coursework.role (id_role) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID;
 
 
-ALTER TABLE IF EXISTS public.books
+ALTER TABLE IF EXISTS coursework.books
     ADD FOREIGN KEY (id_author)
-        REFERENCES public.authors (id_author) MATCH SIMPLE
+        REFERENCES coursework.authors (id_author) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID;
 
 
-ALTER TABLE IF EXISTS public.books
+ALTER TABLE IF EXISTS coursework.books
     ADD FOREIGN KEY (id_publisher)
-        REFERENCES public.publisher (id_publisher) MATCH SIMPLE
+        REFERENCES coursework.publisher (id_publisher) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID;
 
 
-ALTER TABLE IF EXISTS public.check_list
+ALTER TABLE IF EXISTS coursework.check_list
     ADD FOREIGN KEY (id_book)
-        REFERENCES public.books (id_book) MATCH SIMPLE
+        REFERENCES coursework.books (id_book) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID;
 
 
-ALTER TABLE IF EXISTS public.check_list
+ALTER TABLE IF EXISTS coursework.check_list
     ADD FOREIGN KEY (id_status)
-        REFERENCES public.status (id_status) MATCH SIMPLE
+        REFERENCES coursework.status (id_status) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID;
 
 
-ALTER TABLE IF EXISTS public.check_list
+ALTER TABLE IF EXISTS coursework.check_list
     ADD FOREIGN KEY (id_sub)
-        REFERENCES public.subscriptions (id_sub) MATCH SIMPLE
+        REFERENCES coursework.subscriptions (id_sub) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID;
 
 
-ALTER TABLE IF EXISTS public.subscriptions
+ALTER TABLE IF EXISTS coursework.subscriptions
     ADD FOREIGN KEY (id_user)
-        REFERENCES public.users (id_user) MATCH SIMPLE
+        REFERENCES coursework.users (id_user) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID;
