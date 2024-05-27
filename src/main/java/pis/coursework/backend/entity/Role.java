@@ -1,5 +1,6 @@
 package pis.coursework.backend.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "role")
+@Schema(name = "coursework")
 @Getter
 @Setter
 @AllArgsConstructor

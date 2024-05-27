@@ -1,5 +1,6 @@
 package pis.coursework.backend.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
+@Schema(name = "coursework")
 @Table(name = "users")
 @Getter
 @Setter

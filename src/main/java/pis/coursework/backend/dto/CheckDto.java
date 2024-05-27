@@ -13,27 +13,30 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDto {
+public class CheckDto {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @NotNull
-    private String name;
+    private Long bookId;
 
     @NotNull
-    private Long authorId;
+    private Integer statusId;
 
     @NotNull
-    private LocalDateTime datePublishing;
+    private Long subscriptionId;
 
     @NotNull
-    private LocalDateTime dateEntrance;
+    private LocalDateTime dateAdd;
 
     @NotNull
-    private Integer cost;
+    private Integer datePass;
 
     @NotNull
-    private Long publisherId;
+    private LocalDateTime deadline;
+
+    @NotNull
+    private String comment;
 
 }

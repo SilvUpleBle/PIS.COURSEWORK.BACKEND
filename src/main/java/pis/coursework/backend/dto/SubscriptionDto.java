@@ -13,27 +13,21 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDto {
+public class SubscriptionDto {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @NotNull
-    private String name;
+    private Long userId;
 
     @NotNull
-    private Long authorId;
+    private String numberTicket;
 
     @NotNull
-    private LocalDateTime datePublishing;
+    private LocalDateTime dateSub;
 
     @NotNull
-    private LocalDateTime dateEntrance;
-
-    @NotNull
-    private Integer cost;
-
-    @NotNull
-    private Long publisherId;
+    private LocalDateTime dateEnd;
 
 }

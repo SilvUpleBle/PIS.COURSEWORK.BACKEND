@@ -7,13 +7,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDto {
+public class PublisherDto {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
@@ -22,18 +20,9 @@ public class BookDto {
     private String name;
 
     @NotNull
-    private Long authorId;
+    private String city;
 
     @NotNull
-    private LocalDateTime datePublishing;
-
-    @NotNull
-    private LocalDateTime dateEntrance;
-
-    @NotNull
-    private Integer cost;
-
-    @NotNull
-    private Long publisherId;
+    private String license;
 
 }
