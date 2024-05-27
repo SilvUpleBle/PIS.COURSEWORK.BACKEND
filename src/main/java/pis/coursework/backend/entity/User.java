@@ -1,4 +1,4 @@
-package pis.coursework.backend.dto.entity;
+package pis.coursework.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

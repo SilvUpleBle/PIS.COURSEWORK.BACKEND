@@ -1,4 +1,4 @@
-package pis.coursework.backend.dto.entity;
+package pis.coursework.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,17 +7,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "status")
+@Table(name = "role")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Status {
+public class Role {
 
     @Id
-    @Column(name = "id_status")
-    @GeneratedValue(generator = "status_seq")
-    @SequenceGenerator(name = "status_seq", sequenceName = "STATUS_SEQ", allocationSize = 1)
+    @Column(name = "id_role")
+    @GeneratedValue(generator = "role_seq")
+    @SequenceGenerator(name = "role_seq", sequenceName = "ROLE_SEQ", allocationSize = 1)
     private Long id;
 
     @Column(name = "name")
