@@ -4,16 +4,22 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityExistsException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pis.coursework.backend.dto.SubscriptionDto;
+import pis.coursework.backend.service.SubscriptionService;
 
 @RestController("api/v1/subscription")
 @RequestMapping("api/v1")
 @Tag(name = "API абонементы", description = "Rest endpoints абонементов")
 @Slf4j
+@RequiredArgsConstructor
 public class SubscriptionController {
+    private final SubscriptionService subscriptionService;
 
     @PostMapping("/subscription")
     @Operation(summary = "Создание абонемента по переданному json")
@@ -23,7 +29,16 @@ public class SubscriptionController {
             @ApiResponse(responseCode = "500", description = "<p>Ошибка сервера. Приходит ответ с ошибкой.</p>")
     })
     public ResponseEntity<String> addSubscription(@RequestBody SubscriptionDto subscriptionDto) {
-        return ResponseEntity.ok("Абонемент успешно создан!");
+        try {
+            subscriptionService.createSubscription(subscriptionDto);
+            return ResponseEntity.ok("Абонемент успешно создан.");
+        } catch (DataIntegrityViolationException e) {
+            log.error("Возникла ошибка во время создания абонемента.", e);
+            return ResponseEntity.status(400).body("Возникла ошибка во время создания абонемента.\n" + e.getMessage());
+        } catch (Exception e) {
+            log.error("Возникла ошибка во время создания абонемента.", e);
+            return ResponseEntity.status(500).body(e.getClass().toString());
+        }
     }
 
     @GetMapping("/subscription")
@@ -33,8 +48,8 @@ public class SubscriptionController {
             @ApiResponse(responseCode = "400", description = "<p>Ошибка. Приходит ответ с ошибкой.</p>"),
             @ApiResponse(responseCode = "500", description = "<p>Ошибка сервера. Приходит ответ с ошибкой.</p>")
     })
-    public ResponseEntity<String> getAllSubscriptions() {
-        return ResponseEntity.ok("Информация об абонементах получена!");
+    public ResponseEntity<Object> getAllSubscriptions() {
+        return ResponseEntity.ok(subscriptionService.getAllSubscriptions());
     }
 
     @GetMapping("/subscription/{subscriptionId}")
@@ -44,8 +59,16 @@ public class SubscriptionController {
             @ApiResponse(responseCode = "400", description = "<p>Ошибка. Приходит ответ с ошибкой.</p>"),
             @ApiResponse(responseCode = "500", description = "<p>Ошибка сервера. Приходит ответ с ошибкой.</p>")
     })
-    public ResponseEntity<String> getSubscriptionById(@PathVariable Long subscriptionId) {
-        return ResponseEntity.ok("Информация об абонементе получена!");
+    public ResponseEntity<Object> getSubscriptionById(@PathVariable Long subscriptionId) {
+        try {
+            return ResponseEntity.ok(subscriptionService.getSubscriptionById(subscriptionId));
+        } catch (Exception e) {
+            log.error("Возникла ошибка во время получения информации об абонементе.", e);
+            if (e.getClass().equals(EntityExistsException.class)) {
+                return ResponseEntity.status(404).body(e.getMessage());
+            }
+            return ResponseEntity.status(500).body("Возникла ошибка во время получения информации об абонементе.");
+        }
     }
 
     @DeleteMapping("/subscription/{subscriptionId}")
@@ -56,7 +79,16 @@ public class SubscriptionController {
             @ApiResponse(responseCode = "500", description = "<p>Ошибка сервера. Приходит ответ с ошибкой.</p>")
     })
     public ResponseEntity<String> deleteSubscriptionById(@PathVariable Long subscriptionId) {
-        return ResponseEntity.ok("Абонемент успешно удалён!");
+        try {
+            subscriptionService.deleteSubscription(subscriptionId);
+            return ResponseEntity.ok("Абонемент успешно удалён!");
+        } catch (Exception e) {
+            log.error("Возникла ошибка во время удаления абонемента.", e);
+            if (e.getClass().equals(EntityExistsException.class)) {
+                return ResponseEntity.status(404).body(e.getMessage());
+            }
+            return ResponseEntity.status(500).body("Возникла ошибка во время удаления абонемента.");
+        }
     }
 
     @PutMapping("/subscription/{subscriptionId}")
@@ -67,7 +99,16 @@ public class SubscriptionController {
             @ApiResponse(responseCode = "500", description = "<p>Ошибка сервера. Приходит ответ с ошибкой.</p>")
     })
     public ResponseEntity<String> updateSubscriptionById(@PathVariable Long subscriptionId, @RequestBody SubscriptionDto changeSubscription) {
-        return ResponseEntity.ok("Информация об абонементе успешно обновлена!");
+        try {
+            subscriptionService.updateSubscription(subscriptionId, changeSubscription);
+            return ResponseEntity.ok("Информация об абонементе успешно обновлена!");
+        } catch (Exception e) {
+            log.error("Возникла ошибка во время обновления информации об абонементе.", e);
+            if (e.getClass().equals(EntityExistsException.class)) {
+                return ResponseEntity.status(404).body("Абонемента с таким id не существует.");
+            }
+            return ResponseEntity.status(500).body("Возникла ошибка во время обновления информации об абонементе.\n" + e.getMessage());
+        }
     }
 
 }

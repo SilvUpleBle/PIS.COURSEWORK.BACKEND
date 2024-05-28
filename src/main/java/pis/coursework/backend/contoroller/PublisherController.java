@@ -4,16 +4,22 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityExistsException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pis.coursework.backend.dto.PublisherDto;
+import pis.coursework.backend.service.PublisherService;
 
 @RestController("api/v1/publisher")
 @RequestMapping("api/v1")
 @Tag(name = "API издатели", description = "Rest endpoints издателей")
 @Slf4j
+@RequiredArgsConstructor
 public class PublisherController {
+    private final PublisherService publisherService;
 
     @PostMapping("/publisher")
     @Operation(summary = "Создание издателя по переданному json")
@@ -23,7 +29,16 @@ public class PublisherController {
             @ApiResponse(responseCode = "500", description = "<p>Ошибка сервера. Приходит ответ с ошибкой.</p>")
     })
     public ResponseEntity<String> addPublisher(@RequestBody PublisherDto publisherDto) {
-        return ResponseEntity.ok("Издатель успешно создан!");
+        try {
+            publisherService.createPublisher(publisherDto);
+            return ResponseEntity.ok("Издатель успешно создан.");
+        } catch (DataIntegrityViolationException e) {
+            log.error("Возникла ошибка во время создания издателя.", e);
+            return ResponseEntity.status(400).body("Возникла ошибка во время создания издателя.\n" + e.getMessage());
+        } catch (Exception e) {
+            log.error("Возникла ошибка во время создания издателя.", e);
+            return ResponseEntity.status(500).body(e.getClass().toString());
+        }
     }
 
     @GetMapping("/publisher")
@@ -33,8 +48,8 @@ public class PublisherController {
             @ApiResponse(responseCode = "400", description = "<p>Ошибка. Приходит ответ с ошибкой.</p>"),
             @ApiResponse(responseCode = "500", description = "<p>Ошибка сервера. Приходит ответ с ошибкой.</p>")
     })
-    public ResponseEntity<String> getAllAuthors() {
-        return ResponseEntity.ok("Информация об издательствах получена!");
+    public ResponseEntity<Object> getAllAuthors() {
+        return ResponseEntity.ok(publisherService.getAllPublishers());
     }
 
     @GetMapping("/publisher/{publisherId}")
@@ -44,8 +59,16 @@ public class PublisherController {
             @ApiResponse(responseCode = "400", description = "<p>Ошибка. Приходит ответ с ошибкой.</p>"),
             @ApiResponse(responseCode = "500", description = "<p>Ошибка сервера. Приходит ответ с ошибкой.</p>")
     })
-    public ResponseEntity<String> getPublisherById(@PathVariable Long publisherId) {
-        return ResponseEntity.ok("Информация об издателе получена!");
+    public ResponseEntity<Object> getPublisherById(@PathVariable Long publisherId) {
+        try {
+            return ResponseEntity.ok(publisherService.getPublisherById(publisherId));
+        } catch (Exception e) {
+            log.error("Возникла ошибка во время получения информации об издателе.", e);
+            if (e.getClass().equals(EntityExistsException.class)) {
+                return ResponseEntity.status(404).body(e.getMessage());
+            }
+            return ResponseEntity.status(500).body("Возникла ошибка во время получения информации об издателе.");
+        }
     }
 
     @DeleteMapping("/publisher/{publisherId}")
@@ -56,7 +79,16 @@ public class PublisherController {
             @ApiResponse(responseCode = "500", description = "<p>Ошибка сервера. Приходит ответ с ошибкой.</p>")
     })
     public ResponseEntity<String> deletePublisherById(@PathVariable Long publisherId) {
-        return ResponseEntity.ok("Издатель успешно удалён!");
+        try {
+            publisherService.deletePublisher(publisherId);
+            return ResponseEntity.ok("Издатель успешно удалён!");
+        } catch (Exception e) {
+            log.error("Возникла ошибка во время удаления издателя.", e);
+            if (e.getClass().equals(EntityExistsException.class)) {
+                return ResponseEntity.status(404).body(e.getMessage());
+            }
+            return ResponseEntity.status(500).body("Возникла ошибка во время удаления издателя.");
+        }
     }
 
     @PutMapping("/publisher/{publisherId}")
@@ -67,7 +99,16 @@ public class PublisherController {
             @ApiResponse(responseCode = "500", description = "<p>Ошибка сервера. Приходит ответ с ошибкой.</p>")
     })
     public ResponseEntity<String> updatePublisherById(@PathVariable Long publisherId, @RequestBody PublisherDto changePublisher) {
-        return ResponseEntity.ok("Информация об издателе успешно обновлена!");
+        try {
+            publisherService.updatePublisher(publisherId, changePublisher);
+            return ResponseEntity.ok("Информация об издателе успешно обновлена!");
+        } catch (Exception e) {
+            log.error("Возникла ошибка во время обновления информации об издателе.", e);
+            if (e.getClass().equals(EntityExistsException.class)) {
+                return ResponseEntity.status(404).body("Издателя с таким id не существует.");
+            }
+            return ResponseEntity.status(500).body("Возникла ошибка во время обновления информации об издателе.\n" + e.getMessage());
+        }
     }
     
 }

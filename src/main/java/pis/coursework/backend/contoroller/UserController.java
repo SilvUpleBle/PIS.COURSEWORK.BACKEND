@@ -101,7 +101,7 @@ public class UserController {
     public ResponseEntity<String> updateUserById(@PathVariable Long userId, @RequestBody UserDto changeUser) {
         try {
             userService.updateUser(userId, changeUser);
-            return ResponseEntity.ok("Информация о пользователе успешно обновлена!!");
+            return ResponseEntity.ok("Информация о пользователе успешно обновлена!");
         } catch (Exception e) {
             log.error("Возникла ошибка во время обновления информации о пользователе.", e);
             if (e.getClass().equals(EntityExistsException.class)) {

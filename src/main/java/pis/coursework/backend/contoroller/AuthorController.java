@@ -101,7 +101,7 @@ public class AuthorController {
     public ResponseEntity<String> updateAuthorById(@PathVariable Long authorId, @RequestBody AuthorDto changeAuthor) {
         try {
             authorService.updateAuthor(authorId, changeAuthor);
-            return ResponseEntity.ok("Информация об авторе успешно обновлена!!");
+            return ResponseEntity.ok("Информация об авторе успешно обновлена!");
         } catch (Exception e) {
             log.error("Возникла ошибка во время обновления информации об авторе.", e);
             if (e.getClass().equals(EntityExistsException.class)) {
