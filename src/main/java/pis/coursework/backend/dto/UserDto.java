@@ -43,6 +43,6 @@ public class UserDto {
     private String password;
 
     @NotNull
-    private String address;
+    private String adress;
 
 }

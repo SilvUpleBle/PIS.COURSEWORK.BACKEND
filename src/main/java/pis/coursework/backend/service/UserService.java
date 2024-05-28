@@ -43,7 +43,7 @@ public class UserService {
                 .dateReg(LocalDateTime.now())
                 .email(userDto.getEmail())
                 .phone(userDto.getPhone())
-                .adress(userDto.getAddress())
+                .adress(userDto.getAdress())
                 .phone(userDto.getPhone())
                 .build());
     }
@@ -54,6 +54,18 @@ public class UserService {
             throw new EntityExistsException("Пользователя по такому id не существует");
         }
         userRepo.deleteById(userId);
+    }
+
+    @Transactional
+    public void updateUser(Long userId, UserDto userDto) {
+        if (userRepo.getUserById(userId) == null) {
+            throw new EntityExistsException("Пользователя по такому id не существует");
+        }
+        User oldUser = userRepo.getUserById(userId);
+        User updatedUser = userMapper.toEntity(userDto);
+        updatedUser.setId(userId);
+        updatedUser.setDateReg(oldUser.getDateReg());
+        userRepo.save(updatedUser);
     }
 
 }
