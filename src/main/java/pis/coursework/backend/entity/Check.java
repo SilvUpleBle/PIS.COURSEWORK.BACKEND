@@ -20,8 +20,7 @@ public class Check {
 
     @Id
     @Column(name = "id_check_list")
-    @GeneratedValue(generator = "check_seq")
-    @SequenceGenerator(name = "check_seq", sequenceName = "CHECK_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(cascade = CascadeType.DETACH)

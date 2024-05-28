@@ -18,8 +18,7 @@ public class Status {
 
     @Id
     @Column(name = "id_status")
-    @GeneratedValue(generator = "status_seq")
-    @SequenceGenerator(name = "status_seq", sequenceName = "STATUS_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")

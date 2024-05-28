@@ -4,16 +4,22 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityExistsException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pis.coursework.backend.dto.UserDto;
+import pis.coursework.backend.service.UserService;
 
 @RestController("api/v1/user")
 @RequestMapping("api/v1")
 @Tag(name = "API пользователи", description = "Rest endpoints пользователей")
 @Slf4j
+@RequiredArgsConstructor
 public class UserController {
+    private final UserService userService;
 
     @PostMapping("/user")
     @Operation(summary = "Создание пользователя по переданному json")
@@ -23,7 +29,16 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "<p>Ошибка сервера. Приходит ответ с ошибкой.</p>")
     })
     public ResponseEntity<String> addUser(@RequestBody UserDto userDto) {
-        return ResponseEntity.ok("Пользователь успешно создан!");
+        try {
+            userService.createUser(userDto);
+            return ResponseEntity.ok("Пользователь успешно создан.");
+        } catch (DataIntegrityViolationException e) {
+            log.error("Возникла ошибка во время создания пользователя.", e);
+            return ResponseEntity.status(400).body("Возникла ошибка во время создания пользователя.\n" + e.getMessage());
+        } catch (Exception e) {
+            log.error("Возникла ошибка во время создания пользователя.", e);
+            return ResponseEntity.status(500).body(e.getClass().toString());
+        }
     }
 
     @GetMapping("/user")
@@ -33,8 +48,8 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "<p>Ошибка. Приходит ответ с ошибкой.</p>"),
             @ApiResponse(responseCode = "500", description = "<p>Ошибка сервера. Приходит ответ с ошибкой.</p>")
     })
-    public ResponseEntity<String> getAllUsers() {
-        return ResponseEntity.ok("Информация о пользователях получена!");
+    public ResponseEntity<Object> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/user/{userId}")
@@ -44,8 +59,16 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "<p>Ошибка. Приходит ответ с ошибкой.</p>"),
             @ApiResponse(responseCode = "500", description = "<p>Ошибка сервера. Приходит ответ с ошибкой.</p>")
     })
-    public ResponseEntity<String> getUserById(@PathVariable Long userId) {
-        return ResponseEntity.ok("Информация о пользователе получена!");
+    public ResponseEntity<Object> getUserById(@PathVariable Long userId) {
+        try {
+            return ResponseEntity.ok(userService.getUserById(userId));
+        } catch (Exception e) {
+            log.error("Возникла ошибка во время получения информации о пользователе.", e);
+            if (e.getClass().equals(EntityExistsException.class)) {
+                return ResponseEntity.status(404).body(e.getMessage());
+            }
+            return ResponseEntity.status(500).body("Возникла ошибка во время получения информации о пользователе.");
+        }
     }
 
     @DeleteMapping("/user/{userId}")
@@ -56,7 +79,16 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "<p>Ошибка сервера. Приходит ответ с ошибкой.</p>")
     })
     public ResponseEntity<String> deleteUserById(@PathVariable Long userId) {
-        return ResponseEntity.ok("Пользователь успешно удалён!");
+        try {
+            userService.deleteUser(userId);
+            return ResponseEntity.ok("Пользователь успешно удалён!");
+        } catch (Exception e) {
+            log.error("Возникла ошибка во время удаления пользователя.", e);
+            if (e.getClass().equals(EntityExistsException.class)) {
+                return ResponseEntity.status(404).body(e.getMessage());
+            }
+            return ResponseEntity.status(500).body("Возникла ошибка во время удаления пользователя.");
+        }
     }
 
     @PutMapping("/user/{userId}")

@@ -18,8 +18,7 @@ public class Publisher {
 
     @Id
     @Column(name = "id_publisher")
-    @GeneratedValue(generator = "publisher_seq")
-    @SequenceGenerator(name = "publisher_seq", sequenceName = "PUBLISHER_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")

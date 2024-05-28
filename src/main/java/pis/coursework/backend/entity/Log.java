@@ -20,8 +20,7 @@ public class Log {
 
     @Id
     @Column(name = "id_log")
-    @GeneratedValue(generator = "log_seq")
-    @SequenceGenerator(name = "log_seq", sequenceName = "LOG_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "error")

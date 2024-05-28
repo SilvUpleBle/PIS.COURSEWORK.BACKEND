@@ -20,8 +20,7 @@ public class Subscription {
 
     @Id
     @Column(name = "id_sub")
-    @GeneratedValue(generator = "sub_seq")
-    @SequenceGenerator(name = "sub_seq", sequenceName = "SUB_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(cascade = CascadeType.DETACH)

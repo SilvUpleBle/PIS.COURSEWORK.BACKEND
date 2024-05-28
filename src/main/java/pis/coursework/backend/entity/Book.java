@@ -20,8 +20,7 @@ public class Book {
 
     @Id
     @Column(name = "id_book")
-    @GeneratedValue(generator = "books_seq")
-    @SequenceGenerator(name = "books_seq", sequenceName = "BOOKS_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")

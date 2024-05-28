@@ -43,9 +43,6 @@ public class UserDto {
     private String password;
 
     @NotNull
-    private LocalDateTime dateReg;
-
-    @NotNull
     private String address;
 
 }

@@ -6,6 +6,7 @@ import org.mapstruct.ReportingPolicy;
 import pis.coursework.backend.dto.UserDto;
 import pis.coursework.backend.entity.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
@@ -16,6 +17,6 @@ public interface UserMapper {
 
     User toEntity(UserDto userDto);
 
-    List<UserDto> listToDto(List<User> users);
+    ArrayList<UserDto> listToDto(List<User> users);
 
 }

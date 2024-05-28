@@ -2,16 +2,14 @@ package pis.coursework.backend.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Schema(name = "coursework")
 @Table(name = "users")
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -20,8 +18,7 @@ public class User {
 
     @Id
     @Column(name = "id_user")
-    @GeneratedValue(generator = "user_seq")
-    @SequenceGenerator(name = "user_seq", sequenceName = "USER_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "surname")

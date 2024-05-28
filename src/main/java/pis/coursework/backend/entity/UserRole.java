@@ -18,8 +18,7 @@ public class UserRole {
 
     @Id
     @Column(name = "id_userrole")
-    @GeneratedValue(generator = "userrole_seq")
-    @SequenceGenerator(name = "userrole_seq", sequenceName = "USERROLE_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(cascade = CascadeType.DETACH)
