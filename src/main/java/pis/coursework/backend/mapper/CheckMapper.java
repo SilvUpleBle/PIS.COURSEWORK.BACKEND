@@ -6,6 +6,7 @@ import org.mapstruct.ReportingPolicy;
 import pis.coursework.backend.dto.CheckDto;
 import pis.coursework.backend.entity.Check;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
@@ -16,6 +17,6 @@ public interface CheckMapper {
 
     Check toEntity(CheckDto checkDto);
 
-    List<CheckDto> listToDto(List<Check> checkList);
+    ArrayList<CheckDto> listToDto(List<Check> checkList);
 
 }

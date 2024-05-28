@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Data
 @Builder
@@ -22,7 +23,7 @@ public class BookDto {
     private String name;
 
     @NotNull
-    private Long authorId;
+    private ArrayList<Long> authorId;
 
     @NotNull
     private LocalDateTime datePublishing;

@@ -6,6 +6,7 @@ import org.mapstruct.ReportingPolicy;
 import pis.coursework.backend.dto.SubscriptionDto;
 import pis.coursework.backend.entity.Subscription;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
@@ -16,6 +17,6 @@ public interface SubscriptionMapper {
 
     Subscription toEntity(SubscriptionDto subscriptionDto);
 
-    List<SubscriptionDto> listToDto(List<Subscription> subscriptions);
+    ArrayList<SubscriptionDto> listToDto(List<Subscription> subscriptions);
 
 }

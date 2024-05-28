@@ -2,16 +2,15 @@ package pis.coursework.backend.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "books")
 @Schema(name = "coursework")
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,9 +25,9 @@ public class Book {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "id_author", referencedColumnName = "id_author")
-    private Author author;
+    @Column(name = "id_author")
+    @ElementCollection
+    private ArrayList<Long> authorId;
 
     @Column(name = "date_publishing")
     private LocalDateTime datePublishing;

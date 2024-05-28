@@ -6,6 +6,7 @@ import org.mapstruct.ReportingPolicy;
 import pis.coursework.backend.dto.PublisherDto;
 import pis.coursework.backend.entity.Publisher;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
@@ -16,6 +17,6 @@ public interface PublisherMapper {
 
     Publisher toEntity(PublisherDto publisherDto);
 
-    List<PublisherDto> listToDto(List<Publisher> publishers);
+    ArrayList<PublisherDto> listToDto(List<Publisher> publishers);
 
 }
